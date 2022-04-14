@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/clipboard.dart';
 
 import '../../util.dart';
 import '../rendering/editor.dart';
@@ -836,6 +837,8 @@ class RawEditorState extends EditorState
           break;
       }
     }
+    /// Keep a copy of the selected delta with formatting
+    zefyrClipboard.copySelection(widget.controller);
   }
 
   @override
@@ -844,6 +847,8 @@ class RawEditorState extends EditorState
       bringIntoView(textEditingValue.selection.extent);
       hideToolbar();
     }
+    /// Keep a copy of the selected delta with formatting
+    zefyrClipboard.copySelection(widget.controller);
   }
 
   @override
@@ -852,6 +857,11 @@ class RawEditorState extends EditorState
     if (cause == SelectionChangedCause.toolbar) {
       bringIntoView(textEditingValue.selection.extent);
       hideToolbar();
+    }
+    /// Paste the latest delta with formatting if available, otherwise
+    /// fallback to pasting from the system clipboard
+    if (await zefyrClipboard.hasData()) {
+      return zefyrClipboard.pasteData(widget.controller);
     }
   }
 

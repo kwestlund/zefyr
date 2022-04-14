@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/kpw/KPWMods.dart';
 import 'package:zefyr/util.dart';
 
 import '../rendering/editable_text_block.dart';
@@ -103,11 +104,15 @@ class EditableTextBlock extends StatelessWidget {
         style: theme.paragraph.style,
         width: 32.0,
         padding: 8.0,
+        // KPW
+        node: node,
       );
     } else if (block == NotusAttribute.block.bulletList) {
       return _BulletPoint(
         style: theme.paragraph.style.copyWith(fontWeight: FontWeight.bold),
         width: 32,
+        // KPW
+        node: node,
       );
     } else if (block == NotusAttribute.block.code) {
       return _NumberPoint(
@@ -118,6 +123,8 @@ class EditableTextBlock extends StatelessWidget {
         width: 32.0,
         padding: 16.0,
         withDot: false,
+        // KPW
+        node: node,
       );
     } else if (block == NotusAttribute.block.checkList) {
       return _CheckboxPoint(
@@ -254,6 +261,8 @@ class _NumberPoint extends StatelessWidget {
   final bool withDot;
   final double padding;
   final TextStyle style;
+  // KPW
+  final Node node;
 
   const _NumberPoint({
     Key? key,
@@ -263,6 +272,8 @@ class _NumberPoint extends StatelessWidget {
     required this.style,
     this.withDot = true,
     this.padding = 0.0,
+    // KPW
+    required this.node,
   }) : super(key: key);
 
   @override
@@ -271,7 +282,9 @@ class _NumberPoint extends StatelessWidget {
       alignment: AlignmentDirectional.topEnd,
       width: width,
       padding: EdgeInsetsDirectional.only(end: padding),
-      child: Text(withDot ? '$index.' : '$index', style: style),
+// KPW
+//      child: Text(withDot ? '$index.' : '$index', style: style),
+     child: Text(getOrderedChar(node, withDot), style: style),
     );
   }
 }
@@ -279,11 +292,15 @@ class _NumberPoint extends StatelessWidget {
 class _BulletPoint extends StatelessWidget {
   final double width;
   final TextStyle style;
+  // KPW
+  final Node node;
 
   const _BulletPoint({
     Key? key,
     required this.width,
     required this.style,
+    // KPW
+    required this.node,
   }) : super(key: key);
 
   @override
@@ -292,7 +309,9 @@ class _BulletPoint extends StatelessWidget {
       alignment: AlignmentDirectional.topEnd,
       width: width,
       padding: const EdgeInsetsDirectional.only(end: 13.0),
-      child: Text('•', style: style),
+// KPW
+//      child: Text(withDot ? '$index.' : '$index', style: style),
+      child: Text(getBulletChar(node), style: style),
     );
   }
 }

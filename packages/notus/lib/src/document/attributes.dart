@@ -1,6 +1,10 @@
 // Copyright (c) 2018, the Zefyr project authors.  Please see the AUTHORS file
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
+
+// KPW
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:quiver/core.dart';
 
@@ -87,6 +91,8 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.direction.key: NotusAttribute.direction,
     NotusAttribute.alignment.key: NotusAttribute.alignment,
+    // KPW
+    NotusAttribute.indent.key: NotusAttribute.indent,
   };
 
   // Inline attributes
@@ -127,6 +133,9 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
 
   /// Applies checked style to a line of text in checklist block.
   static const checked = _CheckedAttribute();
+
+  // KPW
+  static const indent = IndentAttributeBuilder._();
 
   /// Block attribute
   // ignore: const_eval_throws_exception
@@ -419,6 +428,16 @@ class HeadingAttributeBuilder extends NotusAttributeBuilder<int> {
 class _CheckedAttribute extends NotusAttribute<bool> {
   const _CheckedAttribute()
       : super._('checked', NotusAttributeScope.line, true);
+}
+
+// KPW
+class IndentAttributeBuilder extends NotusAttributeBuilder<int> {
+  static const _kIndent = 'indent';
+  const IndentAttributeBuilder._()
+      : super._(_kIndent, NotusAttributeScope.line);
+
+  NotusAttribute<int> withLevel(int level) =>
+      NotusAttribute._(key, scope, max(min(8, level), 1));
 }
 
 /// Builder for block attribute styles (number/bullet lists, code and quote).

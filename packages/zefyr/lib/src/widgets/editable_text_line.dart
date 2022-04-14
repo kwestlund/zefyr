@@ -50,10 +50,16 @@ class EditableTextLine extends RenderObjectWidget {
   }) : super(key: key);
 
   EdgeInsetsGeometry get _padding => EdgeInsetsDirectional.only(
-        start: indentWidth,
+        start: startPadding, // KPW
         top: spacing.top,
         bottom: spacing.bottom,
       );
+
+  // KPW
+  double get startPadding {
+    return indentWidth +
+        16 * (node.style.get(NotusAttribute.indent)?.value ?? 0);
+  }
 
   @override
   RenderObjectElement createElement() => _RenderEditableTextLineElement(this);
